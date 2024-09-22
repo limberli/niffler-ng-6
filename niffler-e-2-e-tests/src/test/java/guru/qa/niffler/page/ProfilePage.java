@@ -23,11 +23,6 @@ public class ProfilePage {
         return this;
     }
 
-    public ProfilePage checkArchivedCategoryExists(String category) {
-        $x("//span[text()=" + "\"" + category + "\"" + "]").shouldBe(visible);
-        return this;
-    }
-
     public ProfilePage checkCategoryExists(String category) {
         $x("//span[text()=" + "\"" + category + "\"" + "]").shouldBe(visible);
         return this;

@@ -33,7 +33,7 @@ public interface SpendApi {
 
 
   @DELETE("internal/spends/remove")
-  Call<SpendJson> removeSpend(
+  Call <Void> removeSpend(
           @Query("username") String username,      // Обязательный параметр username
           @Query("ids") List<String> ids           // Параметры ids для удаления
   );

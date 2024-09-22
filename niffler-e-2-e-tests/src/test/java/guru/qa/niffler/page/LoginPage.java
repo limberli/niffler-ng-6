@@ -3,10 +3,8 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
 
 public class LoginPage {
   private final SelenideElement usernameInput = $("input[name='username']");
@@ -42,10 +40,8 @@ public class LoginPage {
     return new RegisterPage();
   }
 
-  public LoginPage errorInvalidUserCredentialsShouldAppear() {
+  public LoginPage checkErrorInvalidUserCredentialsShouldAppear() {
     badCredentialsErrorMsg.should(appear);
     return this;
   }
-
-
 }

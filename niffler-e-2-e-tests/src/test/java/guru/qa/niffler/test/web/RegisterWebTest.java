@@ -72,7 +72,7 @@ public class RegisterWebTest {
         open(CFG.frontUrl(), LoginPage.class)
                 .setUsername(username).setPassword(defPassword)
                 .clickSubmitButton()
-                .errorInvalidUserCredentialsShouldAppear();
+                .checkErrorInvalidUserCredentialsShouldAppear();
     }
 
 }

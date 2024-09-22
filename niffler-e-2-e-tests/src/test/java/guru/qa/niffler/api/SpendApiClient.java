@@ -30,7 +30,7 @@ public class SpendApiClient {
         } catch (IOException e) {
             throw new AssertionError(e);
         }
-        assertEquals(200, response.code());
+        assertEquals(201, response.code());
         return response.body();
     }
 
@@ -67,8 +67,8 @@ public class SpendApiClient {
         return response.body();
     }
 
-    public SpendJson removeSpend(String username, List<String> ids) {
-        final Response<SpendJson> response;
+    public Void removeSpend(String username, List<String> ids) {
+        final Response<Void> response;
         try {
             response = spendApi.removeSpend(username, ids).execute();
         } catch (IOException e) {

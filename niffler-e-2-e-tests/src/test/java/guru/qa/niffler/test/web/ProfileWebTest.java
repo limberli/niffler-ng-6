@@ -15,29 +15,22 @@ public class ProfileWebTest {
     private static final Config CFG = Config.getInstance();
     private static final String defPassword = "12345";
 
-    @Category(
-            username = "artem",
-            archived = true
-    )
-
+    @Category(username = "artem", archived = true)
     @Test
     @DisplayName("Проверка отображения архивной категории в списке категорий")
     void archivedCategoryShouldPresentInCategoriesList(CategoryJson category) {
         open(CFG.frontUrl(), LoginPage.class)
                 .login(category.username(), defPassword)
-                .waitMainPageLoaded().openProfileUrl().clickShowArchived()
-                .checkArchivedCategoryExists(category.name());
+                .waitMainPageLoaded()
+                .openProfileUrl().clickShowArchived()
+                .checkCategoryExists(category.name());
     }
 
 
 
 
 
-    @Category(
-            username = "artem",
-            archived = false
-    )
-
+    @Category(username = "artem", archived = false)
     @Test
     @DisplayName("Проверка отображения активной категории в списке категорий")
     void activeCategoryShouldPresentInCategoriesList(CategoryJson category) {

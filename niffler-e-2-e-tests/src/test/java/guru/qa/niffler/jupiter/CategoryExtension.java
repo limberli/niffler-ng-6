@@ -22,7 +22,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                            null,
                             generateCategory(),
                             anno.username(),
-                            anno.archived()
+                            false
                     );
 
                     CategoryJson created = spendApiClient.createCategory(category);
@@ -48,7 +48,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
+    public CategoryJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
         return extensionContext.getStore(CreateSpendingExtension.NAMESPACE)
                 .get(extensionContext.getUniqueId(), CategoryJson.class);
