@@ -37,5 +37,13 @@ public class MainPage {
     return Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class).waitProfileLoaded();
   }
 
+  public FriendsPage openFriendsViaUrl() {
+    return Selenide.open(CFG.frontUrl() + "people/friends", FriendsPage.class);
+  }
+
+  public FriendsPage openAllPeopleViaUrl() {
+    return Selenide.open(CFG.frontUrl() + "people/all", FriendsPage.class);
+  }
+
 
 }
