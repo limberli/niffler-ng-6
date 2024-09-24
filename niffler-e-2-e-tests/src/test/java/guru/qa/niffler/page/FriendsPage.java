@@ -21,7 +21,7 @@ public class FriendsPage {
         return this;
     }
 
-    public FriendsPage emptyFriendsMsgShouldAppear() {
+    public FriendsPage shouldEmptyFriendsMsgShouldAppear() {
         emptyFriendsMsg.should(appear);
         return this;
     }
