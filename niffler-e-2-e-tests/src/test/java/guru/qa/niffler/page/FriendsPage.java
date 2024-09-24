@@ -3,8 +3,7 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
@@ -18,7 +17,7 @@ public class FriendsPage {
     private final SelenideElement emptyFriendsMsg = $(withText("There are no users yet"));
 
     public FriendsPage assertThatFriendIsPresent(String friendName) {
-        friendsRows.filterBy(text(friendName)).first().should(appear);
+        friendsRows.find(text(friendName)).shouldBe(visible);
         return this;
     }
 
@@ -28,7 +27,7 @@ public class FriendsPage {
     }
 
     public FriendsPage assertThatIncomingRequestIsPresent(String name) {
-        requestsRows.filterBy(text(name)).first().should(appear);
+        friendsRows.find(text(name)).shouldBe(visible);
         return this;
     }
 

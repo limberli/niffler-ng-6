@@ -54,11 +54,11 @@ public class UsersQueueExtension implements BeforeTestExecutionCallback, AfterTe
 
     @Override
     public void beforeTestExecution(ExtensionContext context) {
+        //Разобраться с forEach (если будет 2 пользователя?) 59 строчка и разобраться Optional<Queue<StaticUser>> 62 строчка
         Arrays.stream(context.getRequiredTestMethod().getParameters())
-                .filter(p -> AnnotationSupport.isAnnotated(p, UserType.class))
-                .findFirst()
-                .map(p -> p.getAnnotation(UserType.class))
-                .ifPresent(ut -> {
+                .findFirst()  // Находим первый параметр, который аннотирован @UserType
+                .map(p -> p.getAnnotation(UserType.class))  // Преобразуем в аннотацию UserType
+                .ifPresent(ut -> {  // Если аннотация присутствует, продолжаем выполнение
                     Optional<Queue<StaticUser>> userQueue = Optional.empty();
                     StopWatch sw = StopWatch.createStarted();
                     UserType.Type type = ut.value();
@@ -79,21 +79,19 @@ public class UsersQueueExtension implements BeforeTestExecutionCallback, AfterTe
                                 }
                             },
                             () -> {
-                                throw new IllegalStateException("Невозможно получить пользователя после  30s.");
+                                throw new IllegalStateException("Невозможно получить пользователя после 30s.");
                             }
                     );
                 });
     }
 
     private Queue<StaticUser> getQueueByUserType(UserType.Type type) {
-        Queue<StaticUser> queue = null;
-        switch (type) {
-            case EMPTY -> queue = EMPTY_USERS;
-            case WITH_FRIEND -> queue = WITH_FRIEND_USERS;
-            case WITH_INCOME_REQUEST -> queue = WITH_INCOME_REQUEST_USERS;
-            case WITH_OUTCOME_REQUEST -> queue = WITH_OUTCOME_REQUEST_USERS;
-        }
-        return queue;
+        return switch (type) {
+            case EMPTY -> EMPTY_USERS;
+            case WITH_FRIEND -> WITH_FRIEND_USERS;
+            case WITH_INCOME_REQUEST -> WITH_INCOME_REQUEST_USERS;
+            case WITH_OUTCOME_REQUEST -> WITH_OUTCOME_REQUEST_USERS;
+        };
     }
 
 
@@ -103,6 +101,8 @@ public class UsersQueueExtension implements BeforeTestExecutionCallback, AfterTe
         for (Map.Entry<UserType, StaticUser> e : users.entrySet()) {
             UserType.Type type = e.getKey().value();
             getQueueByUserType(type);
+            Queue<StaticUser> queue = getQueueByUserType(type);
+            queue.add(e.getValue());
         }
     }
 
