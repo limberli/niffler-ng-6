@@ -1,22 +1,17 @@
 package guru.qa.niffler.test.web;
 
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.UsersQueueExtension.UserType;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.jupiter.extension.UsersQueueExtension.StaticUser;
 import static guru.qa.niffler.jupiter.extension.UsersQueueExtension.UserType.Type.*;
 
-@ExtendWith({
-        BrowserExtension.class,
-        UsersQueueExtension.class
-})
+@WebTest
 public class FriendsWebTest {
 
     private static final Config CFG = Config.getInstance();
@@ -38,7 +33,7 @@ public class FriendsWebTest {
         open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password())
                 .waitMainPageLoaded().openFriendsViaUrl()
-                .emptyFriendsMsgShouldAppear();
+                .shouldEmptyFriendsMsgShouldAppear();
     }
 
     @Test

@@ -56,9 +56,9 @@ public class UsersQueueExtension implements BeforeTestExecutionCallback, AfterTe
     public void beforeTestExecution(ExtensionContext context) {
         //Разобраться с forEach (если будет 2 пользователя?) 59 строчка и разобраться Optional<Queue<StaticUser>> 62 строчка
         Arrays.stream(context.getRequiredTestMethod().getParameters())
-                .findFirst()  // Находим первый параметр, который аннотирован @UserType
+                .filter(p -> AnnotationSupport.isAnnotated(p, UserType.class) && p.getType().isAssignableFrom(StaticUser.class))
                 .map(p -> p.getAnnotation(UserType.class))  // Преобразуем в аннотацию UserType
-                .ifPresent(ut -> {  // Если аннотация присутствует, продолжаем выполнение
+                .forEach(ut -> {  // Если аннотация присутствует, продолжаем выполнение
                     Optional<Queue<StaticUser>> userQueue = Optional.empty();
                     StopWatch sw = StopWatch.createStarted();
                     UserType.Type type = ut.value();
