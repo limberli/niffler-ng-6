@@ -100,9 +100,8 @@ public class UsersQueueExtension implements BeforeTestExecutionCallback, AfterTe
         Map<UserType, StaticUser> users = context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
         for (Map.Entry<UserType, StaticUser> e : users.entrySet()) {
             UserType.Type type = e.getKey().value();
-            getQueueByUserType(type);
-            Queue<StaticUser> queue = getQueueByUserType(type);
-            queue.add(e.getValue());
+            getQueueByUserType(type).add(e.getValue());
+            //Вернул в очередь пользователей
         }
     }
 
