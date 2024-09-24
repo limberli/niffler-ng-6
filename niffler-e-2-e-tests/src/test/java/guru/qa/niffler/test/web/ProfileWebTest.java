@@ -2,6 +2,7 @@ package guru.qa.niffler.test.web;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.page.LoginPage;
@@ -16,7 +17,9 @@ public class ProfileWebTest {
     private static final Config CFG = Config.getInstance();
     private static final String defPassword = "12345";
 
-    @Category(username = "artem", archived = true)
+    @User(
+            username = "artem",
+            categories = @Category(archived = true))
     @Test
     @DisplayName("Проверка отображения архивной категории в списке категорий")
     void archivedCategoryShouldPresentInCategoriesList(CategoryJson category) {
@@ -27,11 +30,9 @@ public class ProfileWebTest {
                 .checkCategoryExists(category.name());
     }
 
-
-
-
-
-    @Category(username = "artem", archived = false)
+    @User(
+            username = "artem",
+            categories = @Category(archived = false))
     @Test
     @DisplayName("Проверка отображения активной категории в списке категорий")
     void activeCategoryShouldPresentInCategoriesList(CategoryJson category) {

@@ -2,14 +2,12 @@ package guru.qa.niffler.test.web;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Selenide.open;
-import static guru.qa.niffler.utils.RandomData.generateUsername;
+import static guru.qa.niffler.utils.RandomData.randomUsername;
 
 @WebTest
 public class RegisterWebTest {
@@ -22,7 +20,7 @@ public class RegisterWebTest {
     void shouldRegisterNewUser() {
         open(CFG.frontUrl(), LoginPage.class)
                 .goToRegisterPage()
-                .setUsername(generateUsername()).setPassword(defPassword).setSubmitPassword(defPassword)
+                .setUsername(randomUsername()).setPassword(defPassword).setSubmitPassword(defPassword)
                 .clickSignUpButton()
                 .shouldSuccessRegister();
     }
@@ -47,7 +45,7 @@ public class RegisterWebTest {
 
         open(CFG.frontUrl(), LoginPage.class)
                 .goToRegisterPage()
-                .setUsername(generateUsername()).setPassword(defPassword).setSubmitPassword(passwordAreNotEqual)
+                .setUsername(randomUsername()).setPassword(defPassword).setSubmitPassword(passwordAreNotEqual)
                 .clickSignUpButton()
                 .shouldErrorRegister(errorMsg);
 
@@ -67,7 +65,7 @@ public class RegisterWebTest {
 
     @Test
     @DisplayName("Оставаться на странице входа при вводе неправильных данных")
-    void userShouldStayOnLoginPageAfterLoginWithBadCredentials(){
+    void userShouldStayOnLoginPageAfterLoginWithBadCredentials() {
         String username = "artem";
 
         open(CFG.frontUrl(), LoginPage.class)
