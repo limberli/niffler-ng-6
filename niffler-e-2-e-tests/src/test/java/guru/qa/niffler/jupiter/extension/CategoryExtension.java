@@ -31,6 +31,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                         );
 
                         CategoryJson created = spendApiClient.createCategory(category);
+
                         if (anno.archived()) {
                             CategoryJson archivedCategory = new CategoryJson(
                                     created.id(),
