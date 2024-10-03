@@ -5,9 +5,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 public class Databases {
+
     private Databases() {
     }
+
     private static final Map<String, DataSource> dataSources = new ConcurrentHashMap<>();
     private static DataSource dataSource(String jdbcUrl) {
         return dataSources.computeIfAbsent(
