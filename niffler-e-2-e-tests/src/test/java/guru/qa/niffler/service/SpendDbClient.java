@@ -43,7 +43,7 @@ public class SpendDbClient {
     }
 
 
-    public CategoryJson createCategoryJson(CategoryJson category) {
+    public CategoryJson createCategoryIfNotExist(CategoryJson category) {
         Optional<CategoryEntity> existingCategory = categoryDao.findCategoryByUsernameAndCategoryName(category.username(), category.name());
         if (existingCategory.isPresent()) {
             return CategoryJson.fromEntity(existingCategory.get());

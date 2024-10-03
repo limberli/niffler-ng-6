@@ -87,8 +87,8 @@ public class CategoryDaoJdbc implements CategoryDao {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         ce.setId(UUID.fromString(rs.getString("id")));
-                        ce.setName(rs.getString("username"));
-                        ce.setUsername(rs.getString("name"));
+                        ce.setName(rs.getString("name"));
+                        ce.setUsername(rs.getString("username"));
                         return Optional.of(ce);
                     } else {
                         return Optional.empty();
@@ -131,7 +131,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public void deleteCategory(CategoryEntity category) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl());
              PreparedStatement ps = connection.prepareStatement(
-                     "DELETE FROM spend WHERE id = ?"
+                     "DELETE FROM category WHERE id = ?"
              )) {
             ps.setObject(1, category.getId());
             ps.executeUpdate();

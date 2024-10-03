@@ -3,8 +3,8 @@ package guru.qa.niffler.data.impl;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.Databases;
 import guru.qa.niffler.data.dao.UserdataDao;
-import guru.qa.niffler.data.entity.userdata.CurrencyValues;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
+import guru.qa.niffler.model.CurrencyValues;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,8 +30,8 @@ public class UserdataDaoJdbc implements UserdataDao {
             userPs.setString(2, user.getCurrency().name());
             userPs.setString(3, user.getFirstname());
             userPs.setString(4, user.getSurname());
-            userPs.setObject(5, user.getPhoto());
-            userPs.setObject(6, user.getPhotoSmall());
+            userPs.setBytes(5, user.getPhoto());
+            userPs.setBytes(6, user.getPhotoSmall());
             userPs.setString(7, user.getFullname());
 
             userPs.executeUpdate();
