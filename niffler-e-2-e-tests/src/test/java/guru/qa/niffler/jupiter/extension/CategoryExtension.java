@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.CategoryJson;
@@ -32,7 +33,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                                 anno.archived()
                         );
 
-                        CategoryJson createdCategory = spendDbClient.createCategoryIfNotExist(category);
+                        CategoryEntity createdCategory = spendDbClient.createCategoryIfNotExist(category);
 
                         context.getStore(NAMESPACE).put(context.getUniqueId(), createdCategory);
                     }

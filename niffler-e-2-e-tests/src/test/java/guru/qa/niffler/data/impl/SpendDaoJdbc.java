@@ -1,9 +1,7 @@
 package guru.qa.niffler.data.impl;
 
-import guru.qa.niffler.config.Config;
-import guru.qa.niffler.data.Databases;
+import guru.qa.niffler.data.dao.CategoryDao;
 import guru.qa.niffler.data.dao.SpendDao;
-import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
@@ -19,11 +17,14 @@ import java.util.UUID;
 
 public class SpendDaoJdbc implements SpendDao {
 
-    private static final Config CFG = Config.getInstance();
+    private final Connection connection;
+
+    public SpendDaoJdbc(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public SpendEntity create(SpendEntity spend) {
-        try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO spend (username, spend_date, currency, amount, description, category_id) " +
                             "VALUES ( ?, ?, ?, ?, ?, ?)",
@@ -46,15 +47,13 @@ public class SpendDaoJdbc implements SpendDao {
                 }
                 spend.setId(generatedKey);
                 return spend;
-            }
-        } catch (SQLException e) {
+            } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public Optional<SpendEntity> findSpendById(UUID id) {
-        try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM spend WHERE id = ?"
             )) {
@@ -69,22 +68,20 @@ public class SpendDaoJdbc implements SpendDao {
                         se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
                         se.setAmount(rs.getDouble("amount"));
                         se.setDescription(rs.getString("description"));
-                        new CategoryDaoJdbc().findCategoryById(rs.getObject("category_id", UUID.class)).orElseThrow();
+                        new CategoryDaoJdbc(connection).findCategoryById(rs.getObject("category_id", UUID.class)).orElseThrow();
                         return Optional.of(se);
                     } else {
                         return Optional.empty();
                     }
                 }
-            }
-        } catch (SQLException e) {
+            } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public List<SpendEntity> findAllByUsername(String username) {
-        try (Connection connection = Databases.connection(CFG.spendJdbcUrl());
-             PreparedStatement ps = connection.prepareStatement(
+        try (PreparedStatement ps = connection.prepareStatement(
                      "SELECT * FROM \"spend\" WHERE username = ?"
              )) {
             ps.setString(1, username);
@@ -100,7 +97,7 @@ public class SpendDaoJdbc implements SpendDao {
                     se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
                     se.setAmount(rs.getDouble("amount"));
                     se.setDescription(rs.getString("description"));
-                    new CategoryDaoJdbc().findCategoryById(rs.getObject("category_id", UUID.class)).orElseThrow();
+                    new CategoryDaoJdbc(connection).findCategoryById(rs.getObject("category_id", UUID.class)).orElseThrow();
 
                     spendList.add(se);
                 }
@@ -113,8 +110,7 @@ public class SpendDaoJdbc implements SpendDao {
 
     @Override
     public void deleteSpend(SpendEntity spend) {
-        try (Connection connection = Databases.connection(CFG.spendJdbcUrl());
-             PreparedStatement ps = connection.prepareStatement(
+        try (PreparedStatement ps = connection.prepareStatement(
                      "DELETE FROM spend WHERE id = ?"
              )) {
             ps.setObject(1, spend.getId());
