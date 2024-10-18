@@ -1,6 +1,5 @@
-package guru.qa.niffler.data.impl;
+package guru.qa.niffler.data.impl.jdbc;
 
-import guru.qa.niffler.data.dao.CategoryDao;
 import guru.qa.niffler.data.dao.SpendDao;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.model.CurrencyValues;
@@ -116,6 +115,32 @@ public class SpendDaoJdbc implements SpendDao {
             ps.setObject(1, spend.getId());
             ps.executeUpdate();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SpendEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM spend")) {
+            ps.execute();
+            List<SpendEntity> spends = new ArrayList<>();
+
+            try (ResultSet rs = ps.getResultSet()) {
+                while (rs.next()) {
+                    SpendEntity se = new SpendEntity();
+                    se.setId(rs.getObject("id", UUID.class));
+                    se.setUsername(rs.getString("username"));
+                    se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
+                    se.setSpendDate(rs.getDate("spend_date"));
+                    se.setAmount(rs.getDouble("amount"));
+                    se.setDescription(rs.getString("description"));
+                    new CategoryDaoJdbc(connection).findCategoryById(rs.getObject("category_id", UUID.class)).orElseThrow();
+
+                    spends.add(se);
+                }
+            }
+            return spends;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
