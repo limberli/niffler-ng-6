@@ -67,26 +67,24 @@ public class SpendDbClient {
     }
 
 
-    public CategoryEntity createCategoryIfNotExist(CategoryJson category) {
+    public CategoryJson createCategoryIfNotExist(CategoryJson category) {
         return transaction(connection -> {
             CategoryDaoJdbc categoryDao = new CategoryDaoJdbc(connection);
             Optional<CategoryEntity> existingCategory = categoryDao.findCategoryByUsernameAndCategoryName(category.username(), category.name());
             if (existingCategory.isPresent()) {
                 return CategoryJson.fromEntity(existingCategory.get());
             } else {
-                CategoryEntity categoryEntity = CategoryJson.fromEntity(category);
-                //если мне нужно принять c экстеншена json и преобразовать для бд в entity что не так?
+                CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
                 return CategoryJson.fromEntity(categoryDao.create(categoryEntity));
             }
         }, CFG.spendJdbcUrl(), TRANSACTION_ISOLATION_LEVEL);
     }
 
 
-    public CategoryEntity createCategory(CategoryJson category) {
+    public CategoryJson createCategory(CategoryJson category) {
         return transaction(connection -> {
                     CategoryEntity categoryEntity = new CategoryDaoJdbc(connection)
-                            .create(CategoryJson.fromEntity(category));
-                    //Аналогично, этот момент подробно объяснить ?
+                            .create(CategoryEntity.fromJson(category));
                     return CategoryJson.fromEntity(categoryEntity);
                 },
                 CFG.spendJdbcUrl(),

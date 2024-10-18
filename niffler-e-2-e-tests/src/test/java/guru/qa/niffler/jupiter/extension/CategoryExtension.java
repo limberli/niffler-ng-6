@@ -33,7 +33,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                                 anno.archived()
                         );
 
-                        CategoryEntity createdCategory = spendDbClient.createCategoryIfNotExist(category);
+                        CategoryEntity createdCategory = CategoryEntity.fromJson(spendDbClient.createCategoryIfNotExist(category));
 
                         context.getStore(NAMESPACE).put(context.getUniqueId(), createdCategory);
                     }

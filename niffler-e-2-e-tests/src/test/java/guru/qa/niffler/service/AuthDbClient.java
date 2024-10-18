@@ -4,7 +4,6 @@ import guru.qa.niffler.config.Config;
 
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.impl.AuthAuthorityDaoJdbc;
-import guru.qa.niffler.data.impl.AuthUserDaoJdbc;
 
 import java.sql.Connection;
 
@@ -15,15 +14,13 @@ public class AuthDbClient {
     private static final Config CFG = Config.getInstance();
     private static final int TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_READ_COMMITTED;
 
-    public AuthUserEntity createUserInAuthWithAuthorities(AuthUserEntity user) {
+    public AuthUserEntity createUser(AuthUserEntity user) {
         return transaction(connection -> {
-
-                  AuthUserEntity created = new AuthUserDaoJdbc(connection).createUserInAuth(user);
-                  new AuthAuthorityDaoJdbc(connection).setReadAndWriteAuthorityToUser(created.getId());
-                    return created;
+                    return new AuthAuthorityDaoJdbc(connection).create(user);
+                    //Разобрать этот кусок
                 },
-                CFG.authJdbcUrl()
-                ,TRANSACTION_ISOLATION_LEVEL
+                CFG.authJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 }

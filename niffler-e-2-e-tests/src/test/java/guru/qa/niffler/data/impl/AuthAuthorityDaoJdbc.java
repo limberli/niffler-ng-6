@@ -1,11 +1,9 @@
 package guru.qa.niffler.data.impl;
 
 import guru.qa.niffler.data.dao.AuthAuthorityDao;
-import guru.qa.niffler.data.entity.auth.Authority;
+import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
@@ -17,16 +15,25 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
-    public void setReadAndWriteAuthorityToUser(UUID userId) {
-        try (PreparedStatement psRead = connection.prepareStatement("INSERT INTO authority (user_id, authority) VALUES (?, ?)");
-             PreparedStatement psWrite = connection.prepareStatement("INSERT INTO authority (user_id, authority) VALUES (?, ?)")) {
-            psRead.setObject(1, userId);
-            psRead.setString(2, Authority.read.name());
-            psRead.executeUpdate();
-
-            psWrite.setObject(1, userId);
-            psWrite.setString(2, Authority.write.name());
-            psWrite.executeUpdate();
+    public AuthorityEntity create(AuthorityEntity authority) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO authority (user_id, authority) " +
+                        "VALUES ( ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+        )) {
+            ps.setObject(1, authority.getUser().getId());
+            ps.setString(2, authority.getAuthority().name());
+            ps.executeUpdate();
+            final UUID generatedKey;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    generatedKey = rs.getObject("id", UUID.class);
+                } else {
+                    throw new SQLException("Can`t find id in ResultSet");
+                }
+            }
+            authority.setId(generatedKey);
+            return authority;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
