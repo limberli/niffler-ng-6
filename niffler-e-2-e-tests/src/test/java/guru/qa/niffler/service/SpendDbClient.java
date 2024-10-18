@@ -8,6 +8,7 @@ import guru.qa.niffler.data.impl.SpendDaoJdbc;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,6 +18,8 @@ import static guru.qa.niffler.data.Databases.transaction;
 public class SpendDbClient {
 
     private static final Config CFG = Config.getInstance();
+    private static final int TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_READ_COMMITTED;
+
 
     public SpendJson createSpend(SpendJson spend) {
         return transaction(connection -> {
@@ -30,7 +33,8 @@ public class SpendDbClient {
                             new SpendDaoJdbc(connection).create(spendEntity)
                     );
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
 
     }
@@ -38,7 +42,8 @@ public class SpendDbClient {
     public Optional<SpendJson> findSpendById(UUID id) {
         return transaction(connection -> {
                     return new SpendDaoJdbc(connection).findSpendById(id).map(SpendJson::fromEntity);
-                }, CFG.spendJdbcUrl()
+                }, CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
@@ -46,7 +51,8 @@ public class SpendDbClient {
         return transaction(connection -> {
                     return new SpendDaoJdbc(connection).findAllByUsername(username);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
@@ -55,32 +61,34 @@ public class SpendDbClient {
                     SpendEntity spendEntity = SpendEntity.fromJson(SpendJson.fromEntity(spend));
                     new SpendDaoJdbc(connection).deleteSpend(spendEntity);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
 
-    public CategoryEntity createCategoryIfNotExist(CategoryJson category) {
+    public CategoryJson createCategoryIfNotExist(CategoryJson category) {
         return transaction(connection -> {
             CategoryDaoJdbc categoryDao = new CategoryDaoJdbc(connection);
             Optional<CategoryEntity> existingCategory = categoryDao.findCategoryByUsernameAndCategoryName(category.username(), category.name());
             if (existingCategory.isPresent()) {
                 return CategoryJson.fromEntity(existingCategory.get());
             } else {
-                CategoryEntity categoryEntity = CategoryJson.fromEntity(category);
+                CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
                 return CategoryJson.fromEntity(categoryDao.create(categoryEntity));
             }
-        }, CFG.spendJdbcUrl());
+        }, CFG.spendJdbcUrl(), TRANSACTION_ISOLATION_LEVEL);
     }
 
 
-    public CategoryEntity createCategory(CategoryJson category) {
+    public CategoryJson createCategory(CategoryJson category) {
         return transaction(connection -> {
                     CategoryEntity categoryEntity = new CategoryDaoJdbc(connection)
-                            .create(CategoryJson.fromEntity(category));
+                            .create(CategoryEntity.fromJson(category));
                     return CategoryJson.fromEntity(categoryEntity);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
@@ -88,7 +96,8 @@ public class SpendDbClient {
         return transaction(connection -> {
                     return new CategoryDaoJdbc(connection).findCategoryById(id);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
@@ -96,7 +105,8 @@ public class SpendDbClient {
         return transaction(connection -> {
                     return new CategoryDaoJdbc(connection).findCategoryByUsernameAndCategoryName(username, categoryName);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
@@ -105,7 +115,8 @@ public class SpendDbClient {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
                     new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
                 },
-                CFG.spendJdbcUrl()
+                CFG.spendJdbcUrl(),
+                TRANSACTION_ISOLATION_LEVEL
         );
     }
 
