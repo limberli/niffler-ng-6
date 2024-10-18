@@ -17,7 +17,7 @@ public class AuthDbClient {
     public AuthUserEntity createUser(AuthUserEntity user) {
         return transaction(connection -> {
                     return new AuthAuthorityDaoJdbc(connection).create(user);
-                    //Разобрать этот кусок
+                    //Не работает
                 },
                 CFG.authJdbcUrl(),
                 TRANSACTION_ISOLATION_LEVEL
