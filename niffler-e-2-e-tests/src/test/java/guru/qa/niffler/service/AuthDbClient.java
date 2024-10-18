@@ -3,7 +3,7 @@ package guru.qa.niffler.service;
 import guru.qa.niffler.config.Config;
 
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
-import guru.qa.niffler.data.impl.AuthAuthorityDaoJdbc;
+import guru.qa.niffler.data.impl.jdbc.AuthAuthorityDaoJdbc;
 
 import java.sql.Connection;
 
@@ -17,7 +17,7 @@ public class AuthDbClient {
     public AuthUserEntity createUser(AuthUserEntity user) {
         return transaction(connection -> {
                     return new AuthAuthorityDaoJdbc(connection).create(user);
-                    //Не работает
+                      // Разобраться почему не работает
                 },
                 CFG.authJdbcUrl(),
                 TRANSACTION_ISOLATION_LEVEL
