@@ -6,6 +6,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.*;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -20,7 +21,7 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
 
     @Override
-    public AuthUserEntity createUserInAuth(AuthUserEntity user) {
+    public AuthUserEntity create(AuthUserEntity user) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO \"user\" (username, password, enabled, account_non_expired, account_non_locked, credentials_non_expired) " +
                         "VALUES (?, ?, ?, ?, ?, ?)",
@@ -48,5 +49,10 @@ public class AuthUserDaoJdbc implements AuthUserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<AuthUserEntity> findById(UUID id) {
+        return Optional.empty();
     }
 }
