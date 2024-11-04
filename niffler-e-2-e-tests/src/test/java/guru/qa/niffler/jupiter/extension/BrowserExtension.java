@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 
 public class BrowserExtension implements
@@ -37,19 +38,19 @@ public class BrowserExtension implements
   }
 
   @Override
-  public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+  public void handleTestExecutionException(ExtensionContext context, @Nonnull Throwable throwable) throws Throwable {
     doScreenshot();
     throw throwable;
   }
 
   @Override
-  public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+  public void handleBeforeEachMethodExecutionException(ExtensionContext context, @Nonnull Throwable throwable) throws Throwable {
     doScreenshot();
     throw throwable;
   }
 
   @Override
-  public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+  public void handleAfterEachMethodExecutionException(ExtensionContext context, @Nonnull Throwable throwable) throws Throwable {
     doScreenshot();
     throw throwable;
   }

@@ -31,7 +31,6 @@ public interface SpendApi {
           @Query("to") Date to                 // Необязательный параметр (дата)
           );
 
-
   @DELETE("internal/spends/remove")
   Call <Void> removeSpend(
           @Query("username") String username,      // Обязательный параметр username

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 
+import javax.annotation.Nonnull;
+
 import static guru.qa.niffler.utils.RandomData.randomCategoryName;
 
 public class CategoryExtension implements BeforeEachCallback, ParameterResolver, AfterTestExecutionCallback {
@@ -20,7 +22,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
 
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(@Nonnull ExtensionContext context) throws Exception {
         AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
                 //ищет аннотацию @User
                 .ifPresent(userAnno -> {
@@ -41,20 +43,20 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
     }
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
+    public boolean supportsParameter(@Nonnull ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
         return parameterContext.getParameter().getType().isAssignableFrom(CategoryJson.class);
     }
 
     @Override
-    public CategoryJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
+    public CategoryJson resolveParameter(ParameterContext parameterContext, @Nonnull ExtensionContext extensionContext)
             throws ParameterResolutionException {
         return extensionContext.getStore(SpendingExtension.NAMESPACE)
                 .get(extensionContext.getUniqueId(), CategoryJson.class);
     }
 
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterTestExecution(@Nonnull ExtensionContext context) throws Exception {
         CategoryJson category = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
         if (category != null) {
             spendDbClient.deleteCategory(category);

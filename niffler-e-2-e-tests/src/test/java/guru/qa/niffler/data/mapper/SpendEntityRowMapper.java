@@ -8,6 +8,7 @@ import guru.qa.niffler.data.impl.sjdbc.CategoryDaoSpringJdbc;
 import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class SpendEntityRowMapper implements RowMapper<SpendEntity> {
     }
 
     @Override
-    public SpendEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public SpendEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
         SpendEntity result = new SpendEntity();
         result.setId(rs.getObject("id", UUID.class));
         result.setUsername(rs.getString("username"));

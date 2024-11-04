@@ -3,13 +3,15 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-
+@ParametersAreNonnullByDefault
 public class FriendsPage {
     private final ElementsCollection friendsRows = $$("#friends tr");
     private final ElementsCollection requestsRows = $$("#requests tr");

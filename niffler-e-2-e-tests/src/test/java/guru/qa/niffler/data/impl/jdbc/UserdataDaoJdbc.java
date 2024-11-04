@@ -4,6 +4,7 @@ import guru.qa.niffler.data.dao.UserdataDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
+import javax.annotation.Nonnull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ public class UserdataDaoJdbc implements UserdataDao {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity createUser(@Nonnull UserEntity user) {
         try (PreparedStatement userPs = connection.prepareStatement(
                      "INSERT INTO \"user\" (" +
                              "username, currency, firstname, surname, photo, photo_small, full_name) " +
@@ -113,7 +114,7 @@ public class UserdataDaoJdbc implements UserdataDao {
     }
 
     @Override
-    public void delete(UserEntity user) {
+    public void delete(@Nonnull UserEntity user) {
         try (PreparedStatement ps = connection.prepareStatement(
                      "DELETE FROM \"user\" WHERE id = ?"
              )) {
