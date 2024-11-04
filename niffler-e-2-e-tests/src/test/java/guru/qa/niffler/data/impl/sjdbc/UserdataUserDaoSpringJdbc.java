@@ -1,4 +1,4 @@
-package guru.qa.niffler.data.impl;
+package guru.qa.niffler.data.impl.sjdbc;
 
 import guru.qa.niffler.data.dao.UserdataDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,6 +66,15 @@ public class UserdataUserDaoSpringJdbc implements UserdataDao {
     @Override
     public void delete(UserEntity user) {
 
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.query(
+                "SELECT * FROM \"user\"",
+                UdUserEntityRowMapper.instance
+        );
     }
 
 }

@@ -21,4 +21,18 @@ public class AuthUserEntity implements Serializable {
     private Boolean credentialsNonExpired;
     private List<AuthorityEntity> authorities = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "AuthUserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", authorities=" + authorities +
+                '}';
+    }
+
 }
